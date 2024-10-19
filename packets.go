@@ -78,7 +78,7 @@ type TextResponse struct {
 
 type TaskLaunchResponse struct {
 	TaskId   string `json:"taskId"`
-	TaskType int    `json:"taskType"`
+	TaskType string `json:"taskType"`
 }
 
 type TaskCommunicationPackt struct {
