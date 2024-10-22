@@ -69,8 +69,13 @@ type ResponsePacket struct {
 
 const (
 	TypeTextResponse       = "TextResponse"
+	TypeErrorResponse      = "Error"
 	TypeTaskLaunchResponse = "TaskLaunch"
 )
+
+type ErrorResponse struct {
+	Message string `json:"message"`
+}
 
 type TextResponse struct {
 	Text string `json:"text"`
@@ -158,6 +163,12 @@ func ParseResponsePacket(content []byte) (*ResponsePacket, error) {
 	switch packet.ResponseType {
 	case TypeTextResponse:
 		var body TextResponse
+		if err := json.Unmarshal(bytes, &body); err != nil {
+			return nil, err
+		}
+		packet.Body = body
+	case TypeErrorResponse:
+		var body ErrorResponse
 		if err := json.Unmarshal(bytes, &body); err != nil {
 			return nil, err
 		}
@@ -285,6 +296,8 @@ func NewResponsePacket(response interface{}, requestId string) *ResponsePacket {
 		packet.ResponseType = TypeTaskLaunchResponse
 	case TextResponse:
 		packet.ResponseType = TypeTextResponse
+	case ErrorResponse:
+		packet.ResponseType = TypeErrorResponse
 	default:
 		panic("Invalid argument supplied")
 	}
