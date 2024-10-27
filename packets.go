@@ -224,6 +224,9 @@ func NewCommunicationPacket(body interface{}, taskId string) *TaskCommunicationP
 	case CommandTerminate:
 		packet.TaskType = TypeCommandExecution
 		packet.EventType = TypeCommandTerminate
+	case CommandExited:
+		packet.TaskType = TypeCommandExecution
+		packet.EventType = TypeCommandExited
 	case AudioContinueRequest:
 		packet.TaskType = TypePlayAudio
 		packet.EventType = TypeAudioContinueRequest
